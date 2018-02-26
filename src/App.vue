@@ -23,9 +23,9 @@ export default {
         "v-tab": tab
     },
     created() {
-        let _this = this;
+        let self = this;
         this.$http.get('../../../static/data.json').then((res) => {
-            _this.seller = res.data.seller;
+            self.seller = res.data.seller;
         }).catch((err) => {
             console.log(err);
         })

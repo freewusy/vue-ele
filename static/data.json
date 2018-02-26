@@ -56,7 +56,7 @@
                 {
                     "name": "皮蛋瘦肉粥",
                     "price": 10,
-                    "oldPrice": "",
+                    "oldPrice": "15",
                     "description": "咸粥",
                     "sellCount": 229,
                     "rating": 100,
@@ -1146,8 +1146,7 @@
             "rateTime": 1469271264000,
             "deliveryTime": "",
             "score": 4,
-            "rateType": 0,
-            "deliveryTime": "",
+            "rateType": 0,          
             "text": "服务态度不错",
             "avatar": "http://static.galileo.xiaojukeji.com/static/tms/default_header.png",
             "recommend": [
