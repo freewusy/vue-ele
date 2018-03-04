@@ -37,10 +37,12 @@
                 </li>
             </ul>
         </div>
+        <showcart></showcart>
     </div>
 </template>
 <script>
 import Bscroll from "better-scroll";
+import Showcart from "../showcart/Showcart"
 export default {
     data() {
         return {
@@ -121,6 +123,9 @@ export default {
             let el = foodList[index];
             this.foodsScroll.scrollToElement(el, 300);
         }
+    },
+    components: {
+        Showcart
     }
 };
 </script>
