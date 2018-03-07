@@ -37,13 +37,18 @@
                 </li>
             </ul>
         </div>
-        <showcart></showcart>
+        <showcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></showcart>
     </div>
 </template>
 <script>
 import Bscroll from "better-scroll";
 import Showcart from "../showcart/Showcart"
 export default {
+    props: {
+        seller: {
+            type: Object
+        }
+    },
     data() {
         return {
             goods: [],
@@ -56,10 +61,7 @@ export default {
             for (let i = 0; i < this.listHeight.length; i++) {
                 let height1 = this.listHeight[i];
                 let height2 = this.listHeight[i + 1];
-                if (
-                    !height2 ||
-                    (this.scrollY >= height1 && this.scrollY < height2)
-                ) {
+                if ( !height2 || (this.scrollY >= height1 && this.scrollY < height2) ) {
                     return i;
                 }
             }
@@ -101,9 +103,7 @@ export default {
             });
         },
         _calculateHeight() {
-            let foodList = this.$refs.foodWrapper.querySelectorAll(
-                ".food-list-hook"
-            );
+            let foodList = this.$refs.foodWrapper.querySelectorAll(".food-list-hook");
             let height = 0;
             this.listHeight.push(height);
 

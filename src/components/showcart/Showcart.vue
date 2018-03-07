@@ -8,15 +8,32 @@
                     </div>
                 </div>
                 <div class="price">￥0</div>
-                <div class="desc"></div>
+                <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
             </div>
-            <div class="content-right"></div>
+            <div class="content-right">
+                <div class="pay">￥{{minPrice}}元起送</div>
+            </div>
         </div>
     </div>
 </template>
 <script>
 export default {
-  
+    props: {
+        minPrice: {
+            type: Number,
+            default: 0
+        },
+        deliveryPrice: {
+            type: Number,
+            default: 0
+        },
+        selectFoods: {
+            type: Array,
+            default() {
+                return [];
+            }
+        }
+    }
 }
 </script>
 <style lang="scss">
@@ -75,13 +92,19 @@ export default {
                 padding-right: 12px;
                 line-height: 24px;
                 font-size: 16px;
-                color: #80858a;
+                color: rgba(255, 255, 255, 0.4);
                 font-weight: 700;
                 border-right: 1px solid rgba(255, 255, 255, 0.1);
             }
 
             .desc {
-
+                display: inline-block;
+                vertical-align: top;
+                margin-top: 12px;
+                margin-left: 12px;
+                line-height: 24px;
+                font-size: 10px;
+                color: rgba(255, 255, 255, 0.4);
             }
              
         }
@@ -89,6 +112,16 @@ export default {
         .content-right {
             flex: 0 0 105px;
             width: 105px;
+            background-color: #2b333b;
+
+            .pay {
+                height: 48px;
+                line-height: 48px;
+                text-align: center;
+                font-size: 12px;
+                font-weight: 700;
+                color: rgba(255, 255, 255, 0.4);
+            }
         }
     }
 }
