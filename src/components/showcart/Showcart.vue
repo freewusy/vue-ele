@@ -3,11 +3,12 @@
         <div class="content">
             <div class="content-left">
                 <div class="logo-wrapper">
-                    <div class="logo">
+                    <div class="logo" :class="{highlight: totalCount > 0}">
                         <span class="icon-shopping_cart"></span>
                     </div>
+                    <div class="num" v-show="totalCount > 0">{{totalCount}}</div>
                 </div>
-                <div class="price">￥0</div>
+                <div class="price" :class="{highlight: totalPrice > 0}">￥{{totalPrice}}</div>
                 <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
             </div>
             <div class="content-right">
@@ -30,8 +31,30 @@ export default {
         selectFoods: {
             type: Array,
             default() {
-                return [];
+                return [{
+                    price: 10,
+                    count: 1
+                }];
             }
+        }
+    },
+    computed: {
+        totalPrice() {
+            let total = 0;
+            this.selectFoods.forEach((food) => {
+                total += food.price * food.count;
+            });
+            return total;
+        },
+        totalCount() {
+            let count = 0;
+            this.selectFoods.forEach((food) => {
+                count += food.count;
+            })
+            return count;
+        },
+        payDesc() {
+            
         }
     }
 }
@@ -73,16 +96,40 @@ export default {
 
                 .logo {
                     width: 100%;
-                    height: 100;
+                    height: 100%;
                     border-radius: 50%;
                     text-align: center;
                     background-color: #2b343c;
+
+                    &.highlight {
+                        background: rgb(0, 160, 220);
+
+                        .icon-shopping_cart {
+                            color: #fff;
+                        }
+                    }
 
                     .icon-shopping_cart {
                         line-height: 44px;
                         font-size: 24px;
                         color: #80858a;
                     }
+                }
+
+                .num {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 24px;
+                    height: 16px;
+                    line-height: 16px;
+                    text-align: center;
+                    border-radius: 16px;
+                    font-size: 9px;
+                    font-weight: 700;
+                    color: #fff;
+                    background-color: rgb(240, 20, 20);
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
                 }
             }
 
@@ -95,6 +142,10 @@ export default {
                 color: rgba(255, 255, 255, 0.4);
                 font-weight: 700;
                 border-right: 1px solid rgba(255, 255, 255, 0.1);
+
+                &.highlight {
+                    color: #fff;
+                }
             }
 
             .desc {
