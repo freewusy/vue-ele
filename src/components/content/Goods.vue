@@ -31,18 +31,23 @@
                                     <del class="old" v-show="food.oldPrice">
                                         <sub>￥</sub>{{food.oldPrice}}</del>
                                 </div>
-                            </div>
+                                <div class="cartcontrol-wrapper">
+                                    <cartcontrol :food="food"></cartcontrol>
+                                </div>
+                            </div>                        
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <showcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></showcart>
+        <showcart :selectFoods="selectFood" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></showcart>
     </div>
 </template>
 <script>
 import Bscroll from "better-scroll";
-import Showcart from "../showcart/Showcart"
+import Showcart from "../showcart/Showcart";
+import Cartcontrol from "../cartcontrol/Cartcontrol";
+
 export default {
     props: {
         seller: {
@@ -66,6 +71,18 @@ export default {
                 }
             }
             return 0;
+        },
+        selectFood() {
+            let foods = [];
+            this.goods.forEach((good) => {
+                good.foods.forEach((food) => {
+                    if(food.count) {
+                        foods.push(food);
+                    }
+                });
+            });
+
+            return foods;
         }
     },
     created() {
@@ -96,6 +113,7 @@ export default {
                 click: true
             });
             this.foodsScroll = new Bscroll(this.$refs.foodWrapper, {
+                click: true,
                 probeType: 3
             });
             this.foodsScroll.on("scroll", pos => {
@@ -125,7 +143,8 @@ export default {
         }
     },
     components: {
-        Showcart
+        Showcart,
+        Cartcontrol
     }
 };
 </script>
@@ -280,6 +299,12 @@ export default {
                             font-size: 10px;
                         }
                     }
+                }
+
+                .cartcontrol-wrapper {
+                    position: absolute;
+                    right: 0;
+                    bottom: 12px;
                 }
             }
         }
