@@ -32,7 +32,7 @@
                                         <sub>￥</sub>{{food.oldPrice}}</del>
                                 </div>
                                 <div class="cartcontrol-wrapper">
-                                    <cartcontrol :food="food"></cartcontrol>
+                                    <cartcontrol :food="food" @add="addFood"></cartcontrol>
                                 </div>
                             </div>                        
                         </li>
@@ -40,7 +40,7 @@
                 </li>
             </ul>
         </div>
-        <showcart :selectFoods="selectFood" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></showcart>
+        <showcart ref="showcart" :selectFoods="selectFood" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></showcart>
     </div>
 </template>
 <script>
@@ -140,6 +140,14 @@ export default {
             );
             let el = foodList[index];
             this.foodsScroll.scrollToElement(el, 300);
+        },
+        addFood(target) {
+            this._drop(target);
+        },
+        _drop(target) {
+            this.$nextTick(() => {
+                this.$refs.showcart.drop(target);
+            });
         }
     },
     components: {
@@ -303,7 +311,7 @@ export default {
 
                 .cartcontrol-wrapper {
                     position: absolute;
-                    right: 0;
+                    right: -10px;
                     bottom: 12px;
                 }
             }
