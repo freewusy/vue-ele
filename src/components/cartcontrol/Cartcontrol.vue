@@ -85,7 +85,7 @@ export default {
             .inner {
                 transform: rotate(180deg)
             }   
-        }      
+        }
     }
 }
 </style>
