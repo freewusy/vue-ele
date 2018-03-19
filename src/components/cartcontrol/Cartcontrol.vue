@@ -87,8 +87,5 @@ export default {
             }   
         }           
     }
-    // .cart-add {
-         
-    // }
 }
 </style>
