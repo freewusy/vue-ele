@@ -83,7 +83,7 @@ export default {
             opacity: 0;
             transform: translate3d(24px, 0, 0);
             .inner {
-                transform: rotate(180deg)
+                transform: rotate(180deg);
             }   
         }
     }
