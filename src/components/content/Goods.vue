@@ -14,7 +14,7 @@
                 <li v-for="item in goods" class="food-list food-list-hook">
                     <h4 class="title">{{item.name}}</h4>
                     <ul>
-                        <li v-for="food in item.foods" class="food-item">
+                        <li v-for="food in item.foods" class="food-item" @click="selectFood(food, $event)">
                             <div class="icon">
                                 <img width="57" height="57" :src="food.icon">
                             </div>
@@ -40,13 +40,15 @@
                 </li>
             </ul>
         </div>
-        <showcart ref="showcart" :selectFoods="selectFood" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></showcart>
+        <showcart ref="showcart" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></showcart>
+        <food :food="selectedFood" ref="food"></food>
     </div>
 </template>
 <script>
 import Bscroll from "better-scroll";
 import Showcart from "../showcart/Showcart";
 import Cartcontrol from "../cartcontrol/Cartcontrol";
+import Food from "../food/Food";
 
 export default {
     props: {
@@ -58,7 +60,8 @@ export default {
         return {
             goods: [],
             listHeight: [],
-            scrollY: 0
+            scrollY: 0,
+            selectedFood: {}
         };
     },
     computed: {
@@ -72,7 +75,7 @@ export default {
             }
             return 0;
         },
-        selectFood() {
+        selectFoods() {
             let foods = [];
             this.goods.forEach((good) => {
                 good.foods.forEach((food) => {
@@ -141,6 +144,13 @@ export default {
             let el = foodList[index];
             this.foodsScroll.scrollToElement(el, 300);
         },
+        selectFood(food, event) {
+            if (!event._constructed) {
+                return;
+            }
+            this.selectedFood = food;
+            this.$refs.food.show();
+        },
         addFood(target) {
             this._drop(target);
         },
@@ -152,7 +162,8 @@ export default {
     },
     components: {
         Showcart,
-        Cartcontrol
+        Cartcontrol,
+        Food
     }
 };
 </script>
