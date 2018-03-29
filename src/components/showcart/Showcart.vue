@@ -162,7 +162,11 @@ export default {
             while (count--) {
                 let ball = this.balls[count];
                 if (ball.show) {
-                    let rect = ball.el.getBoundingClientRect();
+                    let rect = ball.el.getBoundingClientRect(); 
+                    /*  
+                        getBoundingClientRect用于获得页面中某个元素的左，上，右和下分别相对浏览器视窗的左上角位置,
+                        该函数返回一个Object对象，该对象有6个属性：top,lef,right,bottom,width,height； 
+                    */ 
                     let x = rect.left - 32;
                     let y = -(window.innerHeight - rect.top - 22);
                     el.style.display = "";

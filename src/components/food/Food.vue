@@ -27,15 +27,15 @@
                         </div>
                     </transition>
                 </div>
-                <!-- <split v-show="food.info"></split>
+                <!-- <split v-show="food.info"></split> -->
                 <div class="info" v-show="food.info">
                     <h1 class="title">商品信息</h1>
                     <p class="text">{{food.info}}</p>
                 </div>
-                <split></split>
+                <!-- <split></split> -->
                 <div class="rating">
                     <h1 class="title">商品评价</h1>
-                    <ratingselect @select="selectRating" @toggle="toggleContent" :selectType="selectType" :onlyContent="onlyContent" :desc="desc" :ratings="food.ratings"></ratingselect>
+                    <!-- <ratingselect @select="selectRating" @toggle="toggleContent" :selectType="selectType" :onlyContent="onlyContent" :desc="desc" :ratings="food.ratings"></ratingselect> -->
                     <div class="rating-wrapper">
                         <ul v-show="food.ratings && food.ratings.length">
                             <li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings" class="rating-item border-1px">
@@ -43,7 +43,7 @@
                                     <span class="name">{{rating.username}}</span>
                                     <img class="avatar" width="12" height="12" :src="rating.avatar">
                                 </div>
-                                <div class="time">{{rating.rateTime | formatDate}}</div>
+                                <!-- <div class="time">{{rating.rateTime | formatDate}}</div> -->
                                 <p class="text">
                                     <span :class="{'icon-thumb_up':rating.rateType===0,'icon-thumb_down':rating.rateType===1}"></span>{{rating.text}}
                                 </p>
@@ -51,12 +51,14 @@
                         </ul>
                         <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
     </transition>
 </template>
 <script>
+import Vue from "vue";
+import Bscroll from "better-scroll";
 import cartcontrol from '../cartcontrol/Cartcontrol';
 
 export default {
@@ -76,12 +78,27 @@ export default {
     methods: {
         show() {
             this.showFlag = true;
+            this.$nextTick(() => {
+                if (!this.scroll) {
+                    this.scroll = new Bscroll(this.$refs.food, {
+                        click: true
+                    });
+                } else {
+                    this.scroll.refresh();
+                }
+            });
         },
         hide() {
             this.showFlag = false;
         },
         addFirst(event) {
-            
+            if (!event._constructed) {
+                return;
+            }
+            if(!this.food.count || this.food.count === 0) {
+                Vue.set(this.food, 'count', 1);
+            }
+            this.$emit('add', event.target);
         },
         needShow(type, text) {
             
