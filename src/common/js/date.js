@@ -17,6 +17,17 @@ export const formatDate = (date, format) => {
             format = format.replace(RegExp.$1, RegExp.$1 === 1 ? str : padLeftZero(str));
         }
     }
+
+    /* 
+    利用 RegExp exec() 完成， 加深练习
+    for (let key in time) {
+        let re = new RegExp(key);
+        if (re.test(format)) {
+            let str = time[key] + '';
+            format = format.replace(re.exec(format), re.exec(format) === 1 ? str : padLeftZero(str));
+        }
+    } 
+    */
     return format;
 }
 
