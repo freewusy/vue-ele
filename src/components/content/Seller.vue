@@ -28,9 +28,9 @@
                         </div>
                     </li>
                 </ul>
-                <div class="favorite">
-                    <span class="icon-favorite"></span>
-                    <span class="text"></span>
+                <div class="favorite" @click="toggleFavorite">
+                    <span class="icon-favorite" :class="{active: favorite}"></span>
+                    <span class="text">{{favoriteText}}</span>
                 </div>
             </div>
             <split></split>
@@ -41,7 +41,7 @@
                 </div>
                 <ul v-if="seller.supports" class="supports">
                     <li class="support-item" v-for="(item,index) in seller.supports">
-                        <span class="icon"></span>
+                        <span class="icon" :class="classMap[seller.supports[index].type]"></span>
                         <span class="text">{{seller.supports[index].description}}</span>
                     </li>
                 </ul>
@@ -68,17 +68,86 @@
     </div>
 </template>
 <script>
-import star from '../star/Star';
-import split from '../split/Split';
+import star from "../star/Star";
+import split from "../split/Split";
+import Bscroll from "better-scroll";
 export default {
     props: {
         seller: {
             type: Object
         }
     },
+    data() {
+        return {
+            favorite: false
+        };
+    },
+    created() {
+        this.classMap = [
+            "decrease",
+            "discount",
+            "special",
+            "invoice",
+            "guarantee"
+        ];
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this._initScroll();
+            this._initPics();
+        });
+    },
+    watch: {
+        seller() {
+            this.$nextTick(() => {
+                this._initScroll();
+                this._initPics();
+            });
+        }
+    },
     components: {
         star,
         split
+    },
+    computed: {
+        favoriteText() {
+            return this.favorite ? "已收藏" : "收藏";
+        }
+    },
+    methods: {
+        _initScroll() {
+            if (!this.scroll) {
+                this.scroll = new Bscroll(this.$refs.seller, {
+                    click: true
+                });
+            } else {
+                this.scroll.refresh();
+            }
+        },
+        _initPics() {
+            if (this.seller.pics) {
+                let picwidth = 120;
+                let margin = 6;
+                let width = (picwidth + margin) * this.seller.pics.length - margin;
+                this.$refs.picList.style.width = width + "px";
+                this.$nextTick(() => {
+                    if (!this.picScroll) {
+                        this.picScroll = new Bscroll(this.$refs.picWrapper, {
+                            scrollX: true,
+                            eventPassthrough: "vertical"
+                        });
+                    } else {
+                        this.picScroll.refresh();
+                    }
+                });
+            }
+        },
+        toggleFavorite(event) {
+            if (!event._constructed) {
+                return;
+            }
+            this.favorite = !this.favorite;
+        }
     }
 };
 </script>
@@ -166,60 +235,60 @@ export default {
                 color: rgb(77, 85, 93);
             }
         }
-        .bulletin {
-            padding: 18px 18px 0 18px;
-            .title {
-                margin-bottom: 8px;
-                line-height: 14px;
-                color: rgb(7, 17, 27);
-                font-size: 14px;
-            }
-            .content-wrapper {
-                padding: 0 12px 16px 12px;
-                @include border1px(rgba(7, 17, 27, 0.1));
-                .content {
-                    line-height: 24px;
-                    font-size: 12px;
-                    color: rgb(240, 20, 20);
-                }
-            }
-            .supports .support-item {
-                padding: 16px 12px;
-                @include border1px(rgba(7, 17, 27, 0.1));
-                font-size: 0;
-                &:last-child {
-                    @include border-none();
-                }
-            }
-            .icon {
-                display: inline-block;
-                width: 16px;
-                height: 16px;
-                vertical-align: top;
-                margin-right: 6px;
-                background-size: 16px 16px;
-                background-repeat: no-repeat;
-                &.decrease {
-                    @include bg-img("../../../resource/img/decrease_4");
-                }
-                &.discount {
-                    @include bg-img("../../../resource/img/discount_4");
-                }
-                &.guarantee {
-                    @include bg-img("../../../resource/img/guarantee_4");
-                }
-                &.invoice {
-                    @include bg-img("../../../resource/img/invoice_4");
-                }
-                &.special {
-                    @include bg-img("../../../resource/img/special_4");
-                }
-            }
-            .text {
-                line-height: 16px;
+    }
+    .bulletin {
+        padding: 18px 18px 0 18px;
+        .title {
+            margin-bottom: 8px;
+            line-height: 14px;
+            color: rgb(7, 17, 27);
+            font-size: 14px;
+        }
+        .content-wrapper {
+            padding: 0 12px 16px 12px;
+            @include border1px(rgba(7, 17, 27, 0.1));
+            .content {
+                line-height: 24px;
                 font-size: 12px;
-                color: rgb(7, 17, 27);
+                color: rgb(240, 20, 20);
             }
+        }
+        .supports .support-item {
+            padding: 16px 12px;
+            @include border1px(rgba(7, 17, 27, 0.1));
+            font-size: 0;
+            &:last-child {
+                @include border-none();
+            }
+        }
+        .icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            vertical-align: top;
+            margin-right: 6px;
+            background-size: 16px 16px;
+            background-repeat: no-repeat;
+            &.decrease {
+                @include bg-img("../../../resource/img/decrease_4");
+            }
+            &.discount {
+                @include bg-img("../../../resource/img/discount_4");
+            }
+            &.guarantee {
+                @include bg-img("../../../resource/img/guarantee_4");
+            }
+            &.invoice {
+                @include bg-img("../../../resource/img/invoice_4");
+            }
+            &.special {
+                @include bg-img("../../../resource/img/special_4");
+            }
+        }
+        .text {
+            line-height: 16px;
+            font-size: 12px;
+            color: rgb(7, 17, 27);
         }
     }
     .pics {

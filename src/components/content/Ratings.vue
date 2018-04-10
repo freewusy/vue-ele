@@ -58,7 +58,7 @@ import star from "../star/Star";
 import split from "../split/Split";
 import ratingselect from "../ratingselect/Ratingselect";
 import Bscroll from "better-scroll";
-import {formatDate} from "../../common/js/date";
+import { formatDate } from "../../common/js/date";
 
 const ALL = 2;
 export default {
@@ -98,7 +98,7 @@ export default {
             });
         },
         needShow(type, text) {
-            if(this.onlyContent && !text) {
+            if (this.onlyContent && !text) {
                 return false;
             }
             return this.selectType === ALL ? true : type === this.selectType;
@@ -107,14 +107,16 @@ export default {
     created() {
         let self = this;
         this.$http
-            .get("../../../static/data.json")
+            .get("./api/ratings")
             .then(res => {
-                self.ratings = res.data.ratings;
-                this.$nextTick(() => {
-                    this.scroll = new Bscroll(this.$refs.ratings, {
-                        click: true
+                if (res.data.errno === 0) {
+                    self.ratings = res.data.data;
+                    this.$nextTick(() => {
+                        this.scroll = new Bscroll(this.$refs.ratings, {
+                            click: true
+                        });
                     });
-                });
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -123,7 +125,7 @@ export default {
     filters: {
         formatDate(time) {
             let date = new Date(time);
-            return formatDate(date, 'yyyy-MM-dd hh:mm');
+            return formatDate(date, "yyyy-MM-dd hh:mm");
         }
     }
 };

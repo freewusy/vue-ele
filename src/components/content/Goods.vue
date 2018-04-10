@@ -98,13 +98,15 @@ export default {
         ];
         let self = this;
         this.$http
-            .get("../../../static/data.json")
+            .get("./api/goods")
             .then(res => {
-                self.goods = res.data.goods;
-                self.$nextTick(() => {
-                    self._initScroll();
-                    self._calculateHeight();
-                });
+                if(res.data.errno === 0) {
+                    self.goods = res.data.data;
+                    self.$nextTick(() => {
+                        self._initScroll();
+                        self._calculateHeight();
+                    });
+                }    
             })
             .catch(err => {
                 console.log(err);

@@ -11,11 +11,17 @@
 <script>
 import header from "@/components/header/Header";
 import tab from "@/components/menu/Tab";
+import {urlParse} from './common/js/util';
 
 export default {
     data() {
         return {
-            seller: {}
+            seller: {
+                id: (() => {
+                    let queryParam = urlParse();
+                    return queryParam.id;
+                })()
+            }
         };
     },
     components: {
@@ -24,8 +30,11 @@ export default {
     },
     created() {
         let self = this;
-        this.$http.get('../../../static/data.json').then((res) => {
-            self.seller = res.data.seller;
+        this.$http.get('./api/seller').then((res) => {
+            //这里不应该是这样获取id，只是为了测试才这样写
+            if(res.data.errno === 0) {
+                self.seller = res.data.data;
+            }
         }).catch((err) => {
             console.log(err);
         })
