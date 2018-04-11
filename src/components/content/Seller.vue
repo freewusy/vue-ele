@@ -71,6 +71,7 @@
 import star from "../star/Star";
 import split from "../split/Split";
 import Bscroll from "better-scroll";
+import { saveToLocal, loadFromLocal } from "../../common/js/store";
 export default {
     props: {
         seller: {
@@ -79,7 +80,9 @@ export default {
     },
     data() {
         return {
-            favorite: false
+            favorite: (() => {
+                return loadFromLocal(this.seller.id, 'favorite', false);
+            })()
         };
     },
     created() {
@@ -128,7 +131,8 @@ export default {
             if (this.seller.pics) {
                 let picwidth = 120;
                 let margin = 6;
-                let width = (picwidth + margin) * this.seller.pics.length - margin;
+                let width =
+                    (picwidth + margin) * this.seller.pics.length - margin;
                 this.$refs.picList.style.width = width + "px";
                 this.$nextTick(() => {
                     if (!this.picScroll) {
@@ -147,6 +151,7 @@ export default {
                 return;
             }
             this.favorite = !this.favorite;
+            saveToLocal(this.seller.id, "favorite", this.favorite);
         }
     }
 };
